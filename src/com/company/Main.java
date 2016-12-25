@@ -1,6 +1,7 @@
 package com.company;
 
 import com.company.Common.CreateDatabase;
+import com.company.Common.Select;
 
 import java.util.Scanner;
 
@@ -14,7 +15,7 @@ public class Main {
         String choiceOwn="";
         do{
             System.out.println("Enter your query:\n");
-            inputOne = input.nextLine();
+            inputOne = input.nextLine().toLowerCase();
             divider();
 
 
@@ -27,7 +28,8 @@ public class Main {
     public static boolean divider(){
         Boolean answer = true;
         String[] results = inputOne.split(" ",2);
-        if(results[0]=="create"){
+        results[0] = results[0].toLowerCase();
+        if(results[0].equals("create")){
             CreateDatabase createDatabase = new CreateDatabase();
             createDatabase.setUserQuery(inputOne);
             if(createDatabase.check()){
@@ -37,7 +39,11 @@ public class Main {
                 System.out.println("Your query is incorrect!!!!");
             }
         }
-        else if(results[0]=="select"){
+        else if(results[0].equals("select")){
+            System.out.println("Entered in Select !!!");
+            Select select = new Select();
+            select.setUserQuery(results[1]);
+            select.tokenization();
 
         }
         else if(results[0]=="insert"){
