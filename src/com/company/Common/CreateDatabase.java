@@ -43,6 +43,11 @@ public class CreateDatabase {
             correct = false;
             return correct;
         }
+        if(keywordChecker.checkWithFunctionKeywords(token[2])){
+            correct = false;
+            return correct;
+        }
+
         return correct;
 
     }
