@@ -64,7 +64,11 @@ public class Main {
             Select select = new Select();
             select.setUserQuery(results[1]);
             String result = select.tokenization();
-            System.out.println(result);
+            if(result.isEmpty()){
+                System.out.println("Your query is correct");
+            }
+            else
+                System.out.println(result);
 
         }
         else if(results[0]=="insert"){
