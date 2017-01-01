@@ -74,11 +74,11 @@ public class Select {
         for(String attr: attrs){
             if(attr.split(" ").length==1){
                 if(checkAllKeywords(attr)){
-                    error = "Error near word "+ attr +"!! It is like used of keywords";
+                    error = "1Error near word "+ attr +"!! It is like used of keywords";
                     return error;
                 }
                 else if(attr.equals("")){
-                    error = "The retrieving column is empty!!!";
+                    error = "2The retrieving column is empty!!!";
                             return error;
                 }
             }
@@ -98,7 +98,7 @@ public class Select {
                         word+= String.valueOf(attr.charAt(i));
                     }
                     else{
-                        error = "Error near word" + attr;
+                        error = "3Error near word" + attr;
                         return error;
                     }
 
@@ -124,17 +124,17 @@ public class Select {
                 else if(column.length == 3){
                     if(column[1].equals("as")){
                         if(checkAllKeywords(column[0]) || checkAllKeywords(column[2])){
-                            error = "Error in word "+column[1] +"!! It is like used of keywords";
+                            error = "6Error in word "+column[1] +"!! It is like used of keywords";
                             return error;
                         }
                     }
                     else{
-                        error ="Error in word "+ column[0] + column[1] + column[2] + "!! It is like one of is keywords or the special character is used\"" ;
+                        error ="7Error in word "+ column[0] + column[1] + column[2] + "!! It is like one of is keywords or the special character is used\"" ;
                         return error;
                     }
                 }
                 else if(column.length  > 3){
-                    error = "Error in word" + column[0] + column[1] + column[2] + "!!Excessive variable";
+                    error = "8Error in word" + column[0] + column[1] + column[2] + "!!Excessive variable";
                     return error;
                 }
             }
@@ -192,7 +192,7 @@ public class Select {
     }
     public boolean checkAllKeywords(String word){
         boolean result = false;
-        if(keywordChecker.checkWithKeywords(word) || keywordChecker.checkWithFunctionKeywords(word) ||!keywordChecker.chechWithSpecialCharacter(word)){
+        if(keywordChecker.checkWithKeywords(word) || keywordChecker.checkWithFunctionKeywords(word) || keywordChecker.chechWithSpecialCharacter(word)){
             result = true;
         }
         return result;

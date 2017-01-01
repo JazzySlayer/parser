@@ -27,6 +27,10 @@ public class Main {
     }
     public static boolean divider(){
         Boolean answer = true;
+        System.out.println("answer = " + inputOne);
+        if(inputOne.contains(";")){
+            inputOne = inputOne.substring(0,inputOne.indexOf(';'));
+        }
         String[] results = inputOne.split(" ",2);
         results[0] = results[0].toLowerCase();
         if(results[0].equals("create")){
@@ -40,7 +44,6 @@ public class Main {
             }
         }
         else if(results[0].equals("select")){
-            System.out.println("Entered in Select !!!");
             Select select = new Select();
             select.setUserQuery(results[1]);
             String result = select.tokenization();

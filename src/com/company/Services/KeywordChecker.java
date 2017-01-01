@@ -27,6 +27,7 @@ public class KeywordChecker {
         Pattern p = Pattern.compile("[^a-z0-9_]", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(word);
         boolean b = m.find();
+        System.out.println("b = " + b);
         return b;
     }
 }
