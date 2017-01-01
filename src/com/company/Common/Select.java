@@ -73,7 +73,7 @@ public class Select {
 
         for(String attr: attrs){
             if(attr.split(" ").length==1){
-                if(checkAllKeywords(attr)){
+                if(!attr.equals("*") || checkAllKeywords(attr)){
                     error = "1Error near word "+ attr +"!! It is like used of keywords";
                     return error;
                 }
