@@ -4,66 +4,79 @@ package com.company.Common;
  * Created by Sushant on 1/1/2017.
  */
 public class Insert {
-    public boolean checkInsertIntoQuery(String query) throws Exception {
+    public boolean checkInsertIntoQuery(String query) throws Exception{
 
-        if (!query.contains("insert"))
+        if(!query.contains("insert"))
             return false;
 
         String queryFirstPart = query.substring(0, query.indexOf('(')).toLowerCase();
-//        System.out.println(queryFirstPart);
+        System.out.println("sdf"+queryFirstPart);
 
-        if (queryFirstPart.matches("^insert into \\w+ values")) {
+        if(queryFirstPart.matches("^insert into \\w+ values")){
             String queryValuesPart = query.substring(query.indexOf('(') + 1, query.lastIndexOf(')'));
-            System.out.println(queryValuesPart);
+            System.out.println("test"+queryValuesPart);
+            //  System.out.println(queryValuesPart);
 
 //          for variables part
-            if (queryValuesPart.contains(",")) {
+
+            if(queryValuesPart.contains(",")){
 
                 String values[] = queryValuesPart.split(",");
 
-                for (String value : values) {
+                for(String value: values){
 
-                    if (!value.trim().matches("\\d+|\\'\\w*\\'"))
+                    if(!value.trim().matches("\\d+|\\'\\w*\\'"))
                         return false;
                 }
-            } else {
+            }else{
 
-                if (!queryValuesPart.trim().matches("\\d+|\\'\\w*\\'"))
+                if(!queryValuesPart.trim().matches("\\d+|\\'\\w*\\'"))
                     return false;
             }
 
             return true;
-        } else if (queryFirstPart.matches("^insert into \\w+")) {
+        }else if(queryFirstPart.matches("^insert into \\w+")){
 
             String queryVariablesPart = query.substring(query.indexOf('(') + 1, query.indexOf(" values") - 1);
             String queryValuesPart = query.substring(query.indexOf("values") + 7, query.lastIndexOf(')'));
-            System.out.println(queryVariablesPart);
+            System.out.println("fe"+queryVariablesPart);
             System.out.println(queryValuesPart);
+            if (queryVariablesPart.isEmpty())
+            {
+                System.err.println("variables are empty");
+            }
+            if (queryValuesPart.isEmpty())
+            {
+                System.err.println("values are empty");
+            }
 
 //          for variables part
-            if (queryVariablesPart.contains(",") && queryValuesPart.contains(",")) {
+            if(queryVariablesPart.contains(",") && queryValuesPart.contains(",")){
 
                 String variables[] = queryVariablesPart.split(",");
                 String values[] = queryValuesPart.split(",");
 
-                if (variables.length != values.length)
-                    return false;
+                if(variables.length != values.length)
+                {
+                    System.err.println("variables or values are missing");
+                }
 
-                for (String value : values) {
+                for(String value: values){
 
-                    if (!value.trim().matches("\\d+|\\'\\w*\\'"))
+                    if(!value.trim().matches("\\d+|\\'\\w*\\'"))
                         return false;
                 }
-            } else {
+            }else{
 
-                if (!queryValuesPart.trim().matches("\\d+|\\'\\w*\\'"))
+                if(!queryValuesPart.trim().matches("\\d+|\\'\\w*\\'"))
                     return false;
             }
 
             return true;
-        } else {
+        }else {
 
             if (!queryFirstPart.contains("into"))
+                // System.out.println(queryFirstPart);
                 System.err.println("into is missing");
 
             if (!queryFirstPart.contains("values"))
