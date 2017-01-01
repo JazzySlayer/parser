@@ -51,10 +51,12 @@ public class Select {
                 tableName = separator[0].trim();
                 condition = separator[1].trim();
                 error = checkWithCondition();
+                return error;
             }
             else{
                 tableName = userQuery.split("from",2)[1].trim();
                 error = checkWithOutCondition();
+                return error;
             }
         }
         else{
@@ -142,12 +144,12 @@ public class Select {
         return error ;
     }
 
-    public String checkWithCondition(){
+    public String checkWithOutCondition(){
         String error = "";
         error = checkTableName();
         return error;
     }
-    public String checkWithOutCondition(){
+    public String checkWithCondition(){
         String error = "";
         error = checkTableName();
         if(!error.isEmpty()){
@@ -224,6 +226,8 @@ public class Select {
                 column[i-1]=attrStack.pop().toString();
                 System.out.println( "pop  = " + column[i-1]);
             }
+            Condition condition1 = new Condition("as");
+            condition1.checkAsCondition(column[0]+" "+ column[1] + " " + column[2],column[1],"select","condition");
 
         }
         else{
