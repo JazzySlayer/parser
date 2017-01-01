@@ -211,22 +211,22 @@ public class Select {
 
             Matcher m = p.matcher(String.valueOf(condition.charAt(i)));
             if(condition.charAt(i) == ' ' || (i+1)==condition.length()){
+                word+= String.valueOf(condition.charAt(i));
                 if(!word.isEmpty()){
-                    word+= String.valueOf(condition.charAt(i));
                     attrStack.push(word);
                     word = "";
                 }
             }
-            else if(!m.find()){
+            else if(!m.find() || keywordChecker.checkWithOperator(String.valueOf(condition.charAt(i)))){
                 word+= String.valueOf(condition.charAt(i));
             }
 
         }
+        System.out.println(attrStack.size());
         if(attrStack.size()==3){
             String[] column = new String[attrStack.size()];
             for(int i = attrStack.size();i>0;i--){
                 column[i-1]=attrStack.pop().toString();
-                System.out.println( "pop  = " + column[i-1]);
             }
             Condition condition1 = new Condition("as");
             condition1.checkAsCondition(column[0]+" "+ column[1] + " " + column[2],column[1],"select","condition");

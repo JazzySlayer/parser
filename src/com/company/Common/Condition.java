@@ -16,17 +16,7 @@ public class Condition {
     public Condition(String operator){
         operat = operator;
     }
-    public boolean checkWithOperator(){
-        if(operat.equals(keywords.assigningOperator)) { return true;}
-        else if(operat.equals(keywords.greaterThanOperator)) { return true;}
-        else if(operat.equals(keywords.greaterThanOrEqualOperator)) { return true;}
-        else if(operat.equals(keywords.lessThanOperator)) { return true;}
-        else if(operat.equals(keywords.lessThanOrEqualOperator)) { return true;}
-        else if(operat.equals(keywords.isNotEqualOperator)) { return true;}
-        else{
-            return false;
-        }
-    }
+
 
     public boolean checkAsCondition(String query,String operator,String statement, String function){
         Stack stackCondition = new Stack();
@@ -45,7 +35,7 @@ public class Condition {
     private boolean forSelect(String query, String operator){
         Boolean isCorrect = false;
         KeywordChecker keywordChecker =  new KeywordChecker();
-        if(checkWithOperator()){
+        if(keywordChecker.checkWithOperator(operator)){
             leftPart = query.split(operator)[0].trim();
             aliasPart = query.split(operator)[1].trim();
             if(operator.equals(keywords.assigningOperator)){
@@ -72,7 +62,7 @@ public class Condition {
     private boolean forSelectWhere(String query, String operator){
         Boolean isCorrect = false;
         KeywordChecker keywordChecker =  new KeywordChecker();
-        if(checkWithOperator()){
+        if(keywordChecker.checkWithOperator(operator)){
             leftPart = query.split(operator)[0].trim();
             aliasPart = query.split(operator)[1].trim();
             if(operator.equals(keywords.assigningOperator) || operator.equals(keywords.greaterThanOperator)|| operator.equals(keywords.greaterThanOrEqualOperator)

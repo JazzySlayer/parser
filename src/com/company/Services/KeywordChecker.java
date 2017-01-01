@@ -30,4 +30,15 @@ public class KeywordChecker {
         System.out.println("b = " + b);
         return b;
     }
+    public boolean checkWithOperator(String operat){
+        if(operat.equals(keywords.assigningOperator)) { return true;}
+        else if(operat.equals(keywords.greaterThanOperator)) { return true;}
+        else if(operat.equals(keywords.greaterThanOrEqualOperator)) { return true;}
+        else if(operat.equals(keywords.lessThanOperator)) { return true;}
+        else if(operat.equals(keywords.lessThanOrEqualOperator)) { return true;}
+        else if(operat.equals(keywords.isNotEqualOperator)) { return true;}
+        else{
+            return false;
+        }
+    }
 }
