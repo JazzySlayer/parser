@@ -214,10 +214,6 @@ public class Select {
             else if(!m.find()){
                 word+= String.valueOf(condition.charAt(i));
             }
-            else{
-                error = "Error near word" + condition;
-                return error;
-            }
 
         }
         if(attrStack.size()==3){
