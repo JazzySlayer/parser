@@ -188,6 +188,12 @@ public class Select {
             }
 
         }
+        else if(tableName.split(" ").length == 1){
+            if(tableName.isEmpty()){
+                error = "Error no table selected!!";
+                return error;
+            }
+        }
         return error;
     }
     public boolean checkAllKeywords(String word){
@@ -227,6 +233,8 @@ public class Select {
 
         }
         else{
+            error = "Error near word " + condition;
+            return error;
 
         }
         return error;
