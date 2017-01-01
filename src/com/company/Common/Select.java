@@ -2,9 +2,9 @@ package com.company.Common;
 
 import com.company.Services.KeywordChecker;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Sushant on 12/24/2016.
@@ -19,8 +19,7 @@ public class Select {
     private String tableName="";
     private String condition="";
     private String tableAlias="";
-    private List<String> columnAlias = new ArrayList<String>();
-    private List<String> column = new ArrayList<String>();
+    Pattern p = Pattern.compile("[^a-z0-9_ ]", Pattern.CASE_INSENSITIVE);
 
     public void setUserQuery(String userQuery) {
         this.userQuery = userQuery;
@@ -38,12 +37,15 @@ public class Select {
         this.condition = condition;
     }
 
-    public void tokenization(){
+    public String tokenization(){
         System.out.println("now here!!!!!!!!!1");
         String error = "";
         if(userQuery.contains("from")){
             attrList = userQuery.split("from",2)[0].trim();
             error = checkAttr();
+            if(!error.isEmpty()){
+                return error;
+            }
             if(userQuery.split("from",2)[1].contains("where")){
                 String[] separator = userQuery.split("from",2)[1].split("where",2);
                 tableName = separator[0].trim();
@@ -59,47 +61,99 @@ public class Select {
             error = "No from was found in the query!!!";
 
         }
-
-
-
-
-
-
+        return error;
 //        return error;
     }
+
     public String checkAttr(){
         String error = "";
         String[] attrs = attrList.split(",");
+
         for(String attr: attrs){
-            if(attr.split(" ").length >= 2){
-                if(attr.split(" ").length == 2){
-                    if(attr.split(" ",2)[0].equals("*")||attr.split(" ",2)[1].equals("*") || keywordChecker.checkWithFunctionKeywords(attr.split(" ",2)[0].trim())
-                            || keywordChecker.checkWithFunctionKeywords(attr.split(" ",2)[1].trim())||
-                            keywordChecker.checkWithKeywords(attr.split(" ",2)[0].trim())||
-                            keywordChecker.checkWithKeywords(attr.split(" ",2)[1].trim())){
-                        error = "Error near word "+attr;
+            if(attr.split(" ").length==1){
+                if(checkAllKeywords(attr)){
+                    error = "Error near word "+ attr +"!! It is like used of keywords";
+                    return error;
+                }
+                else if(attr.equals("")){
+                    error = "The retrieving column is empty!!!";
+                            return error;
+                }
+            }
+            else if(attr.split(" ").length > 1){
+                String word = "";
+                Stack attrStack = new Stack();
+                for(int i = 0;i<attr.length();i++){
+                    Matcher m = p.matcher(String.valueOf(attr.charAt(i)));
+                    if(attr.charAt(i) == ' ' || (i+1)==attr.length()){
+                        if(!word.isEmpty()){
+                            word+= String.valueOf(attr.charAt(i));
+                            attrStack.push(word);
+                            word = "";
+                        }
+                    }
+                    else if(!m.find() || attr.charAt(i) =='*'){
+                        word+= String.valueOf(attr.charAt(i));
+                    }
+                    else{
+                        error = "Error near word" + attr;
+                        return error;
+                    }
+
+                }
+                String[] column = new String[attrStack.size()];
+                for(int i = attrStack.size();i>0;i--){
+                    column[i-1]=attrStack.pop().toString();
+                    System.out.println( "pop  = " + column[i-1]);
+                }
+                if(column.length == 2){
+                    if(checkAllKeywords(column[0]) ){
+                        error = "51 Error in word "+ column[0] +"!! It is like used of keywords";
+                        return error;
+                    }
+                    else{
+                        if(checkAllKeywords(column[1])){
+                            error = "52 Error in word "+ column[1] +"!! It is like used of keywords";
+                            return error;
+                        }
+                    }
+
+                }
+                else if(column.length == 3){
+                    if(column[1].equals("as")){
+                        if(checkAllKeywords(column[0]) || checkAllKeywords(column[2])){
+                            error = "Error in word "+column[1] +"!! It is like used of keywords";
+                            return error;
+                        }
+                    }
+                    else{
+                        error ="Error in word "+ column[0] + column[1] + column[2] + "!! It is like one of is keywords or the special character is used\"" ;
                         return error;
                     }
                 }
-                if(attr.contains("as")){
-                    Condition condition1 = new Condition("as");
-                    condition1.checkAsCondition(attr,"as","select","attr");
+                else if(column.length  > 3){
+                    error = "Error in word" + column[0] + column[1] + column[2] + "!!Excessive variable";
+                    return error;
                 }
             }
-            else if(keywordChecker.checkWithFunctionKeywords(attr) || keywordChecker.checkWithKeywords(attr)){
-                error = "Error near word " + attr;
-                return error;
-            }
+
         }
+        System.out.println("Attribut error = " + error);
         return error ;
     }
 
     public String checkWithCondition(){
         String error = "";
+        error = checkTableName();
         return error;
     }
     public String checkWithOutCondition(){
         String error = "";
+        error = checkTableName();
+        if(!error.isEmpty()){
+            return error;
+        }
+        error = checkAllCondition();
         return error;
     }
     public String checkTableName(){
@@ -109,93 +163,75 @@ public class Select {
         int i = 0;
         if(tableName.split(" ").length >= 2){
             if(tableName.split(" ").length == 2){
-                if(tableName.split(" ",2)[0].equals("*")||tableName.split(" ",2)[1].equals("*") || keywordChecker.checkWithFunctionKeywords(tableName.split(" ",2)[0].trim())
-                        || keywordChecker.checkWithFunctionKeywords(tableName.split(" ",2)[1].trim())||
-                        keywordChecker.checkWithKeywords(tableName.split(" ",2)[0].trim())||
-                        keywordChecker.checkWithKeywords(tableName.split(" ",2)[1].trim())){
-                    error = "Error near word "+tableName;
+                if(checkAllKeywords(tableName.split(" ",2)[0].trim())){
+                    error = "Error near word "+tableName.split(" ",2)[0].trim() + "!!! It is like used of keywords";
+                    return error;
+                }
+                else if (tableName.split(" ",2)[0].trim().equals("*")){
+                    error = "Error near word "+tableName.split(" ",2)[0].trim() ;
+                    return error;
+                }
+                else if (checkAllKeywords(tableName.split(" ",2)[1].trim())){
+                    error = "Error near word "+tableName.split(" ",2)[1].trim() + "!!! It is like used of keywords";
+                    return error;
+                }
+                else if (tableName.split(" ",2)[0].trim().equals("*")){
+                    error = "Error near word "+tableName.split(" ",2)[1].trim() ;
                     return error;
                 }
             }
-            else if(tableName.split(" ").length > 2 || tableName.contains("as")){
+            else if(tableName.split(" ").length > 2 && tableName.contains("as")){
                 Condition condition1 = new Condition("as");
                 condition1.checkAsCondition(tableName,"as","select","attr");
             }
+
+        }
+        return error;
+    }
+    public boolean checkAllKeywords(String word){
+        boolean result = false;
+        if(keywordChecker.checkWithKeywords(word) || keywordChecker.checkWithFunctionKeywords(word) ||!keywordChecker.chechWithSpecialCharacter(word)){
+            result = true;
+        }
+        return result;
+    }
+    public String checkAllCondition(){
+        String error = "";
+        String word = "";
+        Stack attrStack = new Stack();
+        for(int i = 0;i<condition.length();i++){
+
+            Matcher m = p.matcher(String.valueOf(condition.charAt(i)));
+            if(condition.charAt(i) == ' ' || (i+1)==condition.length()){
+                if(!word.isEmpty()){
+                    word+= String.valueOf(condition.charAt(i));
+                    attrStack.push(word);
+                    word = "";
+                }
+            }
+            else if(!m.find()){
+                word+= String.valueOf(condition.charAt(i));
+            }
+            else{
+                error = "Error near word" + condition;
+                return error;
+            }
+
+        }
+        if(attrStack.size()==3){
+            String[] column = new String[attrStack.size()];
+            for(int i = attrStack.size();i>0;i--){
+                column[i-1]=attrStack.pop().toString();
+                System.out.println( "pop  = " + column[i-1]);
+            }
+
+        }
+        else{
+
         }
         return error;
     }
 
 
-//    public String chectattrList(){
-//
-//        String error = "",word = "";
-//        selectStack = new Stack();
-//        String[] attrListsegments = attrList.split(" ");
-//        for(String segment: attrListsegments){
-//            for(int i = 0;i<attrList.length();i++){
-//                if(word.equals("as")){
-//
-//                }
-//                else if(attrList.charAt(i) == ' '){
-//                    if(attrList.charAt(i+1) != ' ' && attrList.charAt(i+1) != '(' && attrList.charAt(i+1) != ')'){
-//                        word = "";
-//                    }
-//                    else if(word.equals("distinct") && (attrList.charAt(i) != ' ' || attrList.charAt(i+1) != '(') ){
-//                        if(selectStack.contains(word)){
-//                            error = String.valueOf(i) + "Misuse of aggreagate function";
-//                            break;
-//                        }
-//                        else{
-//
-//                            selectStack.push(word);
-//                            functionNumber++;
-//                            word="";
-//                        }
-//                    }
-//                }
-//                else if(attrList.charAt(i) == '('){
-//                    if(keywordChecker.checkWithKeywords(word) && !word.equals("distinct")){
-//                        error = String.valueOf(i) + "Error it is Keywords used";
-//                        break;
-//                    }
-//                    else if(keywordChecker.checkWithFunctionKeywords(word)){
-//                        if(selectStack.contains(word)){
-//                            error = String.valueOf(i) + "Misuse of aggreagate function";
-//                            break;
-//                        }
-//                        else{
-//
-//                            selectStack.push(word);
-//                            functionNumber++;
-//                            word="";
-//                        }
-//                    }
-//                    else if(attrList.charAt(i+1) == ' '){
-//                        if(column.contains(word)){
-//                            error = String.valueOf(i) + "Error in column Name";
-//                            break;
-//                        }
-//                        column.add("word");
-//                    }
-//                }
-//                else if(attrList.charAt(i) == ')'){
-//                    String poppedWord = "";
-//                    poppedWord = selectStack.pop().toString();
-//                    if(functionNumber == 2 && poppedWord != "distinct"){
-//                        error = String.valueOf(i);
-//                        break;
-//                    }
-//                    functionNumber--;
-//                }
-//                else{
-//                    word += String.valueOf(attrList.charAt(i));
-//                }
-//
-//            }
-//            if(!error.isEmpty()){
-//                break;
-//            }
-//        }
-//        return error;
-//    }
+
 }

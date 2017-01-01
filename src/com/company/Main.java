@@ -43,7 +43,8 @@ public class Main {
             System.out.println("Entered in Select !!!");
             Select select = new Select();
             select.setUserQuery(results[1]);
-            select.tokenization();
+            String result = select.tokenization();
+            System.out.println("result = " + result);
 
         }
         else if(results[0]=="insert"){

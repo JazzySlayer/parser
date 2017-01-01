@@ -20,4 +20,5 @@ public class  Keywords {
     public String likeOperator = "like";
 
 
+
 }
