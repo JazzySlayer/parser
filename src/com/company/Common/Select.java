@@ -38,7 +38,6 @@ public class Select {
     }
 
     public String tokenization(){
-        System.out.println("now here!!!!!!!!!1");
         String error = "";
         if(userQuery.contains("from")){
             attrList = userQuery.split("from",2)[0].trim();
@@ -74,11 +73,11 @@ public class Select {
         for(String attr: attrs){
             if(attr.split(" ").length==1){
                 if(!attr.equals("*") && checkAllKeywords(attr)){
-                    error = "1Error near word "+ attr +"!! It is like used of keywords";
+                    error = "Error near word "+ attr +"!! It is like used of keywords";
                     return error;
                 }
                 else if(attr.equals("")){
-                    error = "2The retrieving column is empty!!!";
+                    error = "The retrieving column is empty!!!";
                             return error;
                 }
             }
@@ -106,16 +105,15 @@ public class Select {
                 String[] column = new String[attrStack.size()];
                 for(int i = attrStack.size();i>0;i--){
                     column[i-1]=attrStack.pop().toString();
-                    System.out.println( "pop  = " + column[i-1]);
                 }
                 if(column.length == 2){
                     if(checkAllKeywords(column[0]) ){
-                        error = "51 Error in word "+ column[0] +"!! It is like used of keywords";
+                        error = "Error in word "+ column[0] +"!! It is like used of keywords";
                         return error;
                     }
                     else{
                         if(checkAllKeywords(column[1])){
-                            error = "52 Error in word "+ column[1] +"!! It is like used of keywords";
+                            error = "Error in word "+ column[1] +"!! It is like used of keywords";
                             return error;
                         }
                     }
@@ -124,23 +122,22 @@ public class Select {
                 else if(column.length == 3){
                     if(column[1].equals("as")){
                         if(checkAllKeywords(column[0]) || checkAllKeywords(column[2])){
-                            error = "6Error in word "+column[1] +"!! It is like used of keywords";
+                            error = "Error in word "+column[1] +"!! It is like used of keywords";
                             return error;
                         }
                     }
                     else{
-                        error ="7Error in word "+ column[0] + column[1] + column[2] + "!! It is like one of is keywords or the special character is used\"" ;
+                        error ="Error in word "+ column[0] + column[1] + column[2] + "!! It is like one of is keywords or the special character is used\"" ;
                         return error;
                     }
                 }
                 else if(column.length  > 3){
-                    error = "8Error in word" + column[0] + column[1] + column[2] + "!!Excessive variable";
+                    error = "Error in word" + column[0] + column[1] + column[2] + "!!Excessive variable";
                     return error;
                 }
             }
 
         }
-        System.out.println("Attribut error = " + error);
         return error ;
     }
 

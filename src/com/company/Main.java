@@ -29,7 +29,6 @@ public class Main {
     }
     public static void divider() throws Exception {
         Boolean answer = true;
-        System.out.println("answer = " + inputOne);
         if(inputOne.contains(";")){
             inputOne = inputOne.substring(0,inputOne.indexOf(';'));
         }
@@ -65,7 +64,7 @@ public class Main {
             Select select = new Select();
             select.setUserQuery(results[1]);
             String result = select.tokenization();
-            System.out.println("result = " + result);
+            System.out.println(result);
 
         }
         else if(results[0]=="insert"){

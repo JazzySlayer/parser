@@ -13,21 +13,18 @@ public class KeywordChecker {
     public boolean checkWithKeywords(String word){
         boolean answer = false;
         answer = keywords.keywordArray.equals(word);
-        System.out.println("Keyword answer = " + answer);
         return answer;
     }
 
     public boolean checkWithFunctionKeywords(String word){
         boolean answer = false;
         answer = keywords.functionKeywordArray.equals(word);
-        System.out.println("Function keyword answer = " + answer);
         return answer;
     }
     public boolean chechWithSpecialCharacter(String word){
         Pattern p = Pattern.compile("[^a-z0-9_]", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(word);
         boolean b = m.find();
-        System.out.println("b = " + b);
         return b;
     }
     public boolean checkWithOperator(String operat){

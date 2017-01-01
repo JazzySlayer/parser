@@ -10,11 +10,9 @@ public class Insert {
             return false;
 
         String queryFirstPart = query.substring(0, query.indexOf('(')).toLowerCase();
-        System.out.println("sdf"+queryFirstPart);
 
         if(queryFirstPart.matches("^insert into \\w+ values")){
             String queryValuesPart = query.substring(query.indexOf('(') + 1, query.lastIndexOf(')'));
-            System.out.println("test"+queryValuesPart);
             //  System.out.println(queryValuesPart);
 
 //          for variables part
@@ -39,8 +37,6 @@ public class Insert {
 
             String queryVariablesPart = query.substring(query.indexOf('(') + 1, query.indexOf(" values") - 1);
             String queryValuesPart = query.substring(query.indexOf("values") + 7, query.lastIndexOf(')'));
-            System.out.println("fe"+queryVariablesPart);
-            System.out.println(queryValuesPart);
             if (queryVariablesPart.isEmpty())
             {
                 System.err.println("variables are empty");

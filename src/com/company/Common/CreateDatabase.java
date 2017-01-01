@@ -29,17 +29,14 @@ public class CreateDatabase {
         String[] token = new String[3];
         token = temp.split(" ");
         if(token[0].toString().toLowerCase() != "create"){
-            System.out.println("1");
             correct = false;
             return correct;
         }
         if(token[1].toString().toLowerCase() != "database"){
-            System.out.println("2");
             correct = false;
             return correct;
         }
         if(keywordChecker.checkWithKeywords(token[2])){
-            System.out.println("3");
             correct = false;
             return correct;
         }
