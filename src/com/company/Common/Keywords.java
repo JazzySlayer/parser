@@ -16,7 +16,7 @@ public class  Keywords {
     public String greaterThanOrEqualOperator = ">=";
     public String lessThanOperator = "<";
     public String lessThanOrEqualOperator = "<=";
-    public String isNotEqualOperator = "<=";
+    public String isNotEqualOperator = "!=";
     public String likeOperator = "like";
 
 
