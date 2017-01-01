@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Sushant on 12/24/2016.
+ * Created by anijor on 12/24/2016.
  */
 public class Select {
     KeywordChecker keywordChecker = new KeywordChecker();
@@ -98,7 +98,7 @@ public class Select {
                         word+= String.valueOf(attr.charAt(i));
                     }
                     else{
-                        error = "3Error near word" + attr;
+                        error = "Error near word" + attr;
                         return error;
                     }
 
@@ -207,66 +207,22 @@ public class Select {
         String error = "";
         String word = "";
         Stack attrStack = new Stack();
-        if(condition.split(" ").length>1){
-            for(int i = 0;i<condition.length();i++){
+        for(int i = 0;i<condition.length();i++){
 
-                Matcher m = p.matcher(String.valueOf(condition.charAt(i)));
-                System.out.println(condition.charAt(i));
-                if(condition.charAt(i) == ' ' || (i+1)==condition.length()){
-                    word+= String.valueOf(condition.charAt(i));
-                    if(word.isEmpty()){
-                        error = "Error after where " + attrStack.pop().toString();
-                        return error;
-                    }
-                    else{
-                        System.out.println("#1word" + word);
-                        attrStack.push(word);
-                        word = "";
-                    }
+            Matcher m = p.matcher(String.valueOf(condition.charAt(i)));
+            if(condition.charAt(i) == ' ' || (i+1)==condition.length()){
+                word+= String.valueOf(condition.charAt(i));
+                if(!word.isEmpty()){
+                    attrStack.push(word);
+                    word = "";
                 }
-                else if(!m.find() || keywordChecker.checkWithOperator(String.valueOf(condition.charAt(i)))){
-                    word+= String.valueOf(condition.charAt(i));
-                }
-
             }
-        }
-        else if(condition.split(" ").length==1){
-            for(int i = 0;i<condition.length();i++){
-
-                Matcher m = p.matcher(String.valueOf(condition.charAt(i)));
-                System.out.println(condition.charAt(i));
-                if((i+1)==condition.length()){
-                    word+=condition.charAt(i);
-                    if(word.isEmpty()){
-                       error = "Error after where " + attrStack.pop().toString();
-                        return error;
-                    }
-                    else{
-                        System.out.println("#1word" + word);
-                        attrStack.push(word);
-                        word = "";
-                    }
-                }
-                else if(keywordChecker.checkWithOperator(String.valueOf(condition.charAt(i)))){
-                    word+=condition.charAt(i);
-                    if(word.isEmpty()){
-                        error = "Error after where " + attrStack.pop().toString();
-                        return error;
-                    }
-                    else{
-                        System.out.println("#1word" + word);
-                        attrStack.push(word);
-                        word = "";
-                        attrStack.push(condition.charAt(i));
-                    }
-                }
-                else if(!m.find()){
-                    word+= String.valueOf(condition.charAt(i));
-                }
-
+            else if(!m.find() || keywordChecker.checkWithOperator(String.valueOf(condition.charAt(i)))){
+                word+= String.valueOf(condition.charAt(i));
             }
+
         }
-        System.out.println("size = " + attrStack.size());
+        System.out.println(attrStack.size());
         if(attrStack.size()==3){
             String[] column = new String[attrStack.size()];
             for(int i = attrStack.size();i>0;i--){
