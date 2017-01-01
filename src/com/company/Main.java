@@ -156,7 +156,9 @@ public class Main {
                 String values[] = queryValuesPart.split(",");
 
                 if(variables.length != values.length)
-                    return false;
+                {
+                    System.err.println("variables or values are missing");
+                }
 
                 for(String value: values){
 
