@@ -207,22 +207,66 @@ public class Select {
         String error = "";
         String word = "";
         Stack attrStack = new Stack();
-        for(int i = 0;i<condition.length();i++){
+        if(condition.split(" ").length>1){
+            for(int i = 0;i<condition.length();i++){
 
-            Matcher m = p.matcher(String.valueOf(condition.charAt(i)));
-            if(condition.charAt(i) == ' ' || (i+1)==condition.length()){
-                word+= String.valueOf(condition.charAt(i));
-                if(!word.isEmpty()){
-                    attrStack.push(word);
-                    word = "";
+                Matcher m = p.matcher(String.valueOf(condition.charAt(i)));
+                System.out.println(condition.charAt(i));
+                if(condition.charAt(i) == ' ' || (i+1)==condition.length()){
+                    word+= String.valueOf(condition.charAt(i));
+                    if(word.isEmpty()){
+                        error = "Error after where " + attrStack.pop().toString();
+                        return error;
+                    }
+                    else{
+                        System.out.println("#1word" + word);
+                        attrStack.push(word);
+                        word = "";
+                    }
                 }
-            }
-            else if(!m.find() || keywordChecker.checkWithOperator(String.valueOf(condition.charAt(i)))){
-                word+= String.valueOf(condition.charAt(i));
-            }
+                else if(!m.find() || keywordChecker.checkWithOperator(String.valueOf(condition.charAt(i)))){
+                    word+= String.valueOf(condition.charAt(i));
+                }
 
+            }
         }
-        System.out.println(attrStack.size());
+        else if(condition.split(" ").length==1){
+            for(int i = 0;i<condition.length();i++){
+
+                Matcher m = p.matcher(String.valueOf(condition.charAt(i)));
+                System.out.println(condition.charAt(i));
+                if((i+1)==condition.length()){
+                    word+=condition.charAt(i);
+                    if(word.isEmpty()){
+                       error = "Error after where " + attrStack.pop().toString();
+                        return error;
+                    }
+                    else{
+                        System.out.println("#1word" + word);
+                        attrStack.push(word);
+                        word = "";
+                    }
+                }
+                else if(keywordChecker.checkWithOperator(String.valueOf(condition.charAt(i)))){
+                    word+=condition.charAt(i);
+                    if(word.isEmpty()){
+                        error = "Error after where " + attrStack.pop().toString();
+                        return error;
+                    }
+                    else{
+                        System.out.println("#1word" + word);
+                        attrStack.push(word);
+                        word = "";
+                        attrStack.push(condition.charAt(i));
+                    }
+                }
+                else if(!m.find()){
+                    word+= String.valueOf(condition.charAt(i));
+                }
+
+            }
+        }
+        System.out.println("size = " + attrStack.size());
         if(attrStack.size()==3){
             String[] column = new String[attrStack.size()];
             for(int i = attrStack.size();i>0;i--){
