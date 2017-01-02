@@ -190,6 +190,9 @@ public class Select {
                 error = "Error no table selected!!";
                 return error;
             }
+            else if(checkAllKeywords(tableName)){
+                error = "Error in table name "+ tableName+"!!! It is like keyWord";
+            }
         }
         return error;
     }
