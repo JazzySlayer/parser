@@ -2,6 +2,7 @@ package com.company.Services;
 
 import com.company.Common.Keywords;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,13 +13,17 @@ public class KeywordChecker {
     Keywords keywords = new Keywords();
     public boolean checkWithKeywords(String word){
         boolean answer = false;
-        answer = keywords.keywordArray.equals(word);
+        answer = Arrays.asList(keywords.keywordArray).contains(word);
+//        answer = keywords.keywordArray.equals(word);
+        System.out.println("answer = " + answer);
         return answer;
     }
 
     public boolean checkWithFunctionKeywords(String word){
         boolean answer = false;
-        answer = keywords.functionKeywordArray.equals(word);
+        answer = Arrays.asList(keywords.functionKeywordArray).contains(word);
+//        answer = keywords.functionKeywordArray.equals(word);
+        System.out.println("answer = " + answer);
         return answer;
     }
     public boolean chechWithSpecialCharacter(String word){
