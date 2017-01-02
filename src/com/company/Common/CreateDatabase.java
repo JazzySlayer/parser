@@ -27,12 +27,12 @@ public class CreateDatabase {
         Boolean correct = true;
         String temp = userQuery;
         String[] token = new String[3];
-        token = temp.split(" ");
-        if(token[0].toString().toLowerCase() != "create"){
+        token = temp.split(" ",3);
+        if(!token[0].equals("create")){
             correct = false;
             return correct;
         }
-        if(token[1].toString().toLowerCase() != "database"){
+        if(!token[1].equals("database")){
             correct = false;
             return correct;
         }
@@ -41,6 +41,10 @@ public class CreateDatabase {
             return correct;
         }
         if(keywordChecker.checkWithFunctionKeywords(token[2])){
+            correct = false;
+            return correct;
+        }
+        if(token[2].split(" ").length > 1){
             correct = false;
             return correct;
         }
